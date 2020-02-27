@@ -41,7 +41,7 @@ with open("index.html", "w") as writer:
             font-family: sans-serif;
             float: left;
             clear: both;
-            padding: 5px;
+            padding: 5px;   
             margin: 10px;
             border-radius: 5px;
         }

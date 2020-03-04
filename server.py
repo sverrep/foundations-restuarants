@@ -13,7 +13,7 @@ handler.cgi_directories = ["/cgi-bin"]
 
 # define the server using the handler
 PORT = 80
-httpd = socketserver.TCPServer(("35.242.248.4", PORT), handler)
+httpd = socketserver.TCPServer(("0.0.0.0", PORT), handler)
 
 # Set variables which the CGIHTTPRequestHandler expects
 httpd.server_name = "myServer"

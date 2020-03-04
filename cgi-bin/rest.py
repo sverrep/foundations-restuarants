@@ -1,29 +1,33 @@
 from jinja2 import Template
 
-class Restaurant:
-    def __init__(self, name, neighborhood):
-        self.name = name
-        self.neighborhood = neighborhood
-    def printr(self):
-        return(self.name + ", " + self.neighborhood)
+# import the python library for SQLite 
+import sqlite3
 
+# connect to the database file, and create a connection object
+db_connection = sqlite3.connect('restaurants.db')
 
-with open("restaurants.txt", "r") as reader:
-    restaurants = reader.read().splitlines()
-    restaurantlist = []
-    i = 0
-    orlist = ""
-    for x in restaurants:
-        info = x.split(",")
-        restaurantlist.append(Restaurant(info[0], info[1]))
-        orlist = orlist + "<li>" + restaurantlist[i].printr() + "</li>"
-        i= i+1
+# create a database cursor object, which allows us to perform SQL on the database. 
+db_cursor = db_connection.cursor()
+
+# run a first query 
+db_cursor.execute("SELECT NAME, NEIGHBORHOOD_ID from restaurants")
+
+# store the result in a local variable. 
+# this will be a list of tuples, where each tuple represents a row in the table
+list_restaurants = db_cursor.fetchall()
+final_list = []
+rlist = ""
+for x in list_restaurants:
+    if x[1] == 1:
+        rlist = rlist + "<li>" + x[0] + "</li>"
+
+db_connection.close()
 
 with open("index.html", "w") as writer:
     html1 = Template("""
     <html lang="en"> 
         <head>
-            <title>BLN Restaurants</title>
+            <title>Restaurants in Kreuzberg</title>
         </head>
         <style>
         h1 {
@@ -47,14 +51,15 @@ with open("index.html", "w") as writer:
         }
         </style>
         <body>
-            <h1> Restaurants in Berlin </h1>
+            <h1> Restaurants in Kreuzberg </h1>
             <p>
+            updatepls
                 <ol>
-                {{orlist}}
+                {{rlist}}
                 </ol>
             </p>
         </body>
     </html>""")
-    html = html1.render(orlist=orlist)
+    html = html1.render(rlist=rlist)
     writer.write(html)
 
